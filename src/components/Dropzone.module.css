@@ -1,0 +1,105 @@
+.fullscreen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  height: 100%;
+  padding: 40px;
+  background: radial-gradient(
+    1200px 600px at 50% -10%,
+    rgba(10, 132, 255, 0.12),
+    transparent 60%
+  );
+}
+
+.zone {
+  width: min(560px, 90vw);
+  padding: 56px 40px;
+  border: 1.5px dashed var(--border-strong);
+  border-radius: 16px;
+  background: var(--bg-elevated);
+  text-align: center;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.1s ease;
+  outline: none;
+}
+
+.zone:hover,
+.zone:focus-visible {
+  border-color: var(--accent);
+  background: var(--bg-panel);
+}
+
+.dragging {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  transform: scale(1.01);
+}
+
+.input {
+  display: none;
+}
+
+.icon {
+  font-size: 44px;
+  color: var(--accent);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  margin: 10px 0 0;
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.subtitle code {
+  font-family: var(--mono);
+  background: var(--bg-panel);
+  padding: 1px 6px;
+  border-radius: 5px;
+  font-size: 13px;
+}
+
+.privacy {
+  margin: 16px 0 0;
+  color: var(--text-muted);
+  font-size: 12.5px;
+}
+
+.pasteButton {
+  margin-top: 22px;
+  padding: 8px 16px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--text);
+  font-size: 13px;
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+
+.pasteButton:hover {
+  background: var(--bg-hover);
+  border-color: var(--accent);
+}
+
+.error {
+  max-width: min(560px, 90vw);
+  padding: 12px 16px;
+  border: 1px solid var(--crash);
+  background: var(--crash-soft);
+  color: #ffb3ad;
+  border-radius: 10px;
+  font-size: 13.5px;
+}
+
+.inline {
+  padding: 16px;
+}

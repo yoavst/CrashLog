@@ -1,0 +1,179 @@
+.panel {
+  padding: 22px 26px 60px;
+  max-width: 1200px;
+}
+
+.head {
+  margin-bottom: 18px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+}
+
+.crashed {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--bg);
+  background: var(--crash);
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+.subhead {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.queue {
+  color: var(--accent);
+}
+
+.empty {
+  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.frames {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.frame {
+  display: grid;
+  grid-template-columns: 42px 190px 150px 1fr;
+  align-items: baseline;
+  gap: 14px;
+  padding: 5px 14px;
+  border-left: 2px solid transparent;
+  white-space: nowrap;
+}
+
+.frame:nth-child(even) {
+  background: rgba(255, 255, 255, 0.014);
+}
+
+.frame:hover {
+  background: var(--bg-hover);
+}
+
+/* Developer's own code stands out with a hazard-amber marker. */
+.appFrame {
+  border-left-color: var(--warn);
+  background: var(--warn-soft);
+}
+
+.appFrame:hover {
+  background: rgba(255, 159, 10, 0.12);
+}
+
+.depth {
+  color: var(--text-muted);
+  text-align: right;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+
+.image {
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 500;
+}
+
+.address {
+  color: var(--address);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+
+.symbol {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.symbolName {
+  color: var(--symbol);
+}
+
+.offset {
+  color: var(--text-muted);
+}
+
+.unsymbolicated {
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.source {
+  color: var(--ok);
+  font-size: 11px;
+  opacity: 0.85;
+}
+
+.registers {
+  margin-top: 28px;
+}
+
+.registersTitle {
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin: 0 0 12px;
+}
+
+.registerGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.register {
+  display: flex;
+  gap: 10px;
+  padding: 5px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.regName {
+  color: var(--text-muted);
+  min-width: 30px;
+}
+
+.regValue {
+  color: var(--address);
+}

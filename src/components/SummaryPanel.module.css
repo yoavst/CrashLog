@@ -1,0 +1,277 @@
+.panel {
+  padding: 24px 26px 60px;
+  max-width: 1100px;
+}
+
+/* The headline fault readout — the one thing you see first. */
+.fault {
+  position: relative;
+  padding: 22px 24px;
+  border-radius: 12px;
+  background: linear-gradient(
+    135deg,
+    var(--crash-soft),
+    rgba(255, 69, 58, 0.03)
+  );
+  border: 1px solid rgba(255, 69, 58, 0.35);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.fault::before {
+  /* hazard stripe accent */
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 4px;
+  background: var(--crash);
+}
+
+.faultLabel {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #ff8a82;
+}
+
+.faultSignal {
+  font-family: var(--mono);
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #fff;
+  margin-top: 4px;
+  line-height: 1.1;
+}
+
+.faultType {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+.faultDetails {
+  margin: 16px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+}
+
+.signatures {
+  margin: 16px 0 0;
+  padding: 0 0 0 18px;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.signatures li {
+  margin: 2px 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+}
+
+.card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 18px;
+}
+
+/* Cards holding long values (e.g. the VM summary) span the whole grid. */
+.cardWide {
+  grid-column: 1 / -1;
+}
+
+.cardTitle {
+  margin: 0 0 12px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.dl,
+.faultDetails {
+  margin: 0;
+}
+
+/* Two side-by-side columns (Diagnostics: region info | summary). */
+.dlColumns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 720px) {
+  .dlColumns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.detail {
+  display: flex;
+  gap: 10px;
+  padding: 3px 0;
+}
+
+/* Label stacked above the value, for narrow columns. */
+.detailStacked {
+  flex-direction: column;
+  gap: 4px;
+}
+
+.detailStacked .dt {
+  width: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.dt {
+  flex-shrink: 0;
+  width: 84px;
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 12.5px;
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.mono {
+  font-family: var(--mono);
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.wrap {
+  /* Preserve embedded newlines (e.g. VM summary) while still wrapping long lines. */
+  white-space: pre-wrap;
+}
+
+.collapsible {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.clamped {
+  width: 100%;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.expanded {
+  width: 100%;
+  white-space: inherit;
+}
+
+.toggle {
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  font-family: var(--sans);
+  font-size: 12px;
+}
+
+.toggle:hover {
+  text-decoration: underline;
+}
+
+/* Quick peek at the crashed thread */
+.peek {
+  margin-top: 24px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--bg-elevated);
+}
+
+.peekHead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--crash-soft);
+  border-bottom: 1px solid var(--border);
+}
+
+.peekTitle {
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: #ff8a82;
+}
+
+.peekLink {
+  border: none;
+  background: none;
+  color: var(--accent);
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+.peekLink:hover {
+  text-decoration: underline;
+}
+
+.peekFrames {
+  list-style: none;
+  margin: 0;
+  padding: 8px 0;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+
+.peekFrame {
+  display: grid;
+  grid-template-columns: 32px 170px 1fr;
+  gap: 12px;
+  padding: 3px 16px;
+  white-space: nowrap;
+}
+
+.peekDepth {
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.peekImage {
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.peekSymbol {
+  color: var(--symbol);
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.peekOffset {
+  color: var(--text-muted);
+}
