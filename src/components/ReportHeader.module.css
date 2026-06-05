@@ -1,117 +1,119 @@
 .header {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding: 10px 16px;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 10px 16px;
+    background: var(--bg-elevated);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
 }
 
 .identity {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-  flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
 }
 
 .badge {
-  width: 38px;
-  height: 38px;
-  flex-shrink: 0;
-  border-radius: 9px;
-  background: linear-gradient(145deg, #0a84ff, #0060df);
-  color: white;
-  font-weight: 600;
-  font-size: 18px;
-  display: grid;
-  place-items: center;
+    width: 38px;
+    height: 38px;
+    flex-shrink: 0;
+    border-radius: 9px;
+    background: linear-gradient(145deg, #0a84ff, #0060df);
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+    display: grid;
+    place-items: center;
 }
 
 .titles {
-  min-width: 0;
+    min-width: 0;
 }
 
 .appName {
-  display: flex;
-  align-items: baseline;
-  gap: 8px;
-  font-size: 15px;
-  font-weight: 600;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .version {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
 }
 
 .meta {
-  font-size: 12px;
-  color: var(--text-secondary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+    font-size: 12px;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .signal {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  background: var(--crash-soft);
-  border: 1px solid rgba(255, 69, 58, 0.4);
-  color: #ff8a82;
-  font-family: var(--mono);
-  font-size: 13px;
-  font-weight: 600;
-  white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    background: var(--crash-soft);
+    border: 1px solid rgba(255, 69, 58, 0.4);
+    color: #ff8a82;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .signalDot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--crash);
-  box-shadow: 0 0 8px rgba(255, 69, 58, 0.8);
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--crash);
+    box-shadow: 0 0 8px rgba(255, 69, 58, 0.8);
 }
 
 .actions {
-  display: flex;
-  gap: 8px;
-  flex-shrink: 0;
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
 .input {
-  display: none;
+    display: none;
 }
 
 .button,
 .buttonGhost {
-  padding: 7px 14px;
-  border-radius: 7px;
-  font-size: 13px;
-  font-weight: 500;
-  border: 1px solid var(--border-strong);
-  color: var(--text);
-  background: var(--bg-panel);
-  transition: background 0.12s ease, border-color 0.12s ease;
+    padding: 7px 14px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    border: 1px solid var(--border-strong);
+    color: var(--text);
+    background: var(--bg-panel);
+    transition:
+        background 0.12s ease,
+        border-color 0.12s ease;
 }
 
 .button:hover {
-  background: var(--accent);
-  border-color: var(--accent);
+    background: var(--accent);
+    border-color: var(--accent);
 }
 
 .buttonGhost {
-  background: transparent;
+    background: transparent;
 }
 
 .buttonGhost:hover {
-  background: var(--bg-hover);
+    background: var(--bg-hover);
 }
