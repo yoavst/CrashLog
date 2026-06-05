@@ -96,6 +96,8 @@ export interface StackFrame {
   imageIndex: number;
   /** Absolute instruction address. */
   address: string;
+  /** Byte offset of the address from the image's load base. */
+  imageOffset: number;
   /** Symbol name, when symbolicated. */
   symbol?: string;
   /** Byte offset from `symbol`. */

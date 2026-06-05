@@ -55,11 +55,7 @@ export function App() {
           )}
           {view.kind === "raw" && <RawPanel report={report} />}
           {view.kind === "thread" && activeThread && (
-            <BacktracePanel
-              thread={activeThread}
-              images={report.images}
-              query={query}
-            />
+            <BacktracePanel thread={activeThread} images={report.images} />
           )}
         </main>
       </div>

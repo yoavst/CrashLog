@@ -95,6 +95,12 @@
   gap: 1px;
 }
 
+.threadEmpty {
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--text-muted, #888);
+}
+
 .threadItem {
   display: flex;
   align-items: center;

@@ -1,19 +1,14 @@
-import { useMemo } from "react";
 import type { BinaryImage, StackFrame, Thread } from "../types";
 import styles from "./BacktracePanel.module.css";
 
 interface BacktracePanelProps {
   thread: Thread;
   images: BinaryImage[];
-  query: string;
 }
 
 /** Renders one thread's backtrace, register dump, and frame details. */
-export function BacktracePanel({ thread, query, images }: BacktracePanelProps) {
-  const frames = useMemo(
-    () => filterFrames(thread.frames, query),
-    [thread.frames, query],
-  );
+export function BacktracePanel({ thread, images }: BacktracePanelProps) {
+  const frames = thread.frames;
 
   return (
     <div className={styles.panel}>
@@ -32,19 +27,15 @@ export function BacktracePanel({ thread, query, images }: BacktracePanelProps) {
         )}
       </div>
 
-      {frames.length === 0 ? (
-        <p className={styles.empty}>No frames match “{query}”.</p>
-      ) : (
-        <ol className={styles.frames}>
-          {frames.map((frame) => (
-            <FrameRow
-              key={frame.depth}
-              frame={frame}
-              highlighted={isAppFrame(frame, images)}
-            />
-          ))}
-        </ol>
-      )}
+      <ol className={styles.frames}>
+        {frames.map((frame) => (
+          <FrameRow
+            key={frame.depth}
+            frame={frame}
+            highlighted={isAppFrame(frame, images)}
+          />
+        ))}
+      </ol>
 
       {thread.registers && thread.registers.length > 0 && (
         <RegisterDump registers={thread.registers} />
@@ -66,18 +57,19 @@ function FrameRow({
       <span className={styles.image} title={frame.image}>
         {frame.image}
       </span>
+      <span className={styles.imageOffset}>+ 0x{frame.imageOffset.toString(16)}</span>
       <span className={styles.address}>{frame.address}</span>
       <span className={styles.symbol}>
         {frame.symbol ? (
           <>
             <span className={styles.symbolName}>{frame.symbol}</span>
             {frame.symbolOffset !== undefined && (
-              <span className={styles.offset}> + {frame.symbolOffset}</span>
+              <span className={styles.offset}> + 0x{frame.symbolOffset.toString(16)}</span>
             )}
           </>
         ) : (
           <span className={styles.unsymbolicated}>
-            {frame.image} + offset
+            {frame.image} + 0x{frame.imageOffset.toString(16)}
           </span>
         )}
         {frame.sourceFile && (
@@ -121,17 +113,4 @@ function isAppFrame(frame: StackFrame, images: BinaryImage[]): boolean {
     path.startsWith("/Library/") ||
     path.includes("/dyld_shared_cache");
   return !isSystem;
-}
-
-function filterFrames(frames: StackFrame[], query: string): StackFrame[] {
-  const q = query.trim().toLowerCase();
-  if (!q) return frames;
-  return frames.filter((frame) => {
-    return (
-      frame.symbol?.toLowerCase().includes(q) ||
-      frame.image.toLowerCase().includes(q) ||
-      frame.address.toLowerCase().includes(q) ||
-      frame.sourceFile?.toLowerCase().includes(q)
-    );
-  });
 }

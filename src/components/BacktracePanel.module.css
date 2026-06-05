@@ -1,6 +1,5 @@
 .panel {
   padding: 22px 26px 60px;
-  max-width: 1200px;
 }
 
 .head {
@@ -61,16 +60,20 @@
   border-radius: 10px;
   overflow: hidden;
   background: var(--bg-elevated);
+  /* Single grid for the whole list so column widths align across every row. */
+  display: grid;
+  grid-template-columns: 24px max-content max-content max-content 1fr;
 }
 
 .frame {
+  /* Each row is a subgrid spanning all columns, sharing the list's tracks. */
   display: grid;
-  grid-template-columns: 42px 190px 150px 1fr;
-  align-items: baseline;
-  gap: 14px;
+  grid-template-columns: subgrid;
+  grid-column: 1 / -1;
+  align-items: start;
+  column-gap: 14px;
   padding: 5px 14px;
   border-left: 2px solid transparent;
-  white-space: nowrap;
 }
 
 .frame:nth-child(even) {
@@ -93,7 +96,7 @@
 
 .depth {
   color: var(--text-muted);
-  text-align: right;
+  text-align: left;
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
@@ -102,6 +105,7 @@
   color: var(--text);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
   font-weight: 500;
 }
 
@@ -109,14 +113,23 @@
   color: var(--address);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+
+.imageOffset {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
 }
 
 .symbol {
-  overflow: hidden;
-  text-overflow: ellipsis;
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 6px;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .symbolName {

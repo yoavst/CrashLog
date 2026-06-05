@@ -60,7 +60,15 @@ interface IpsThread {
   queue?: string;
   triggered?: boolean;
   frames?: IpsFrame[];
-  threadState?: { x?: { value: number }[]; flavor?: string };
+  threadState?: {
+    x?: { value: number }[];
+    lr?: { value: number };
+    sp?: { value: number };
+    fp?: { value: number };
+    pc?: { value: number };
+    cpsr?: { value: number };
+    flavor?: string;
+  };
 }
 
 interface IpsPayload {
@@ -88,7 +96,6 @@ interface IpsPayload {
   threads?: IpsThread[];
   usedImages?: IpsImage[];
   faultingThread?: number;
-  vmSummary?: string;
   vmRegionInfo?: string;
 }
 
@@ -150,6 +157,7 @@ function buildFrames(frames: IpsFrame[], images: BinaryImage[]): StackFrame[] {
       image: image?.name ?? "???",
       imageIndex,
       address: toHexAddress(baseValue + offset),
+      imageOffset: offset,
       symbol: frame.symbol,
       symbolOffset: frame.symbolLocation,
       sourceFile: frame.sourceFile ? basename(frame.sourceFile) : undefined,
@@ -178,10 +186,15 @@ function buildRegisters(
   state: IpsThread["threadState"],
 ): KeyValue[] | undefined {
   if (!state?.x?.length) return undefined;
-  return state.x.map((reg, i) => ({
+  const registers: KeyValue[] = state.x.map((reg, i) => ({
     key: `x${i}`,
-    value: toHexAddress(reg.value ?? 0),
+    value: toHexAddress(reg.value ?? 0, 16),
   }));
+  for (const key of ["lr", "sp"] as const) {
+    const reg = state[key];
+    if (reg) registers.push({ key, value: toHexAddress(reg.value ?? 0, 16) });
+  }
+  return registers;
 }
 
 function buildException(payload: IpsPayload): ExceptionInfo {
@@ -216,8 +229,6 @@ function buildExtra(payload: IpsPayload): KeyValue[] {
   const extra: KeyValue[] = [];
   if (payload.vmRegionInfo)
     extra.push({ key: "VM Region Info", value: payload.vmRegionInfo });
-  if (payload.vmSummary)
-    extra.push({ key: "VM Summary", value: payload.vmSummary });
   return extra;
 }
 

@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type { CrashReport } from "../types";
 import type { View } from "./Sidebar";
 import styles from "./SummaryPanel.module.css";
@@ -92,16 +92,9 @@ export function SummaryPanel({ report, onSelectThread }: SummaryPanelProps) {
         )}
 
         {report.extra.length > 0 && (
-          <Card title="Diagnostics" wide columns>
+          <Card wide>
             {report.extra.map((kv) => (
-              <Detail
-                key={kv.key}
-                label={kv.key}
-                value={kv.value}
-                stacked
-                wrap
-                collapsible
-              />
+              <Detail key={kv.key} label={kv.key} value={kv.value} stacked wrap />
             ))}
           </Card>
         )}
@@ -147,21 +140,16 @@ export function SummaryPanel({ report, onSelectThread }: SummaryPanelProps) {
 function Card({
   title,
   wide,
-  columns,
   children,
 }: {
-  title: string;
+  title?: string;
   wide?: boolean;
-  /** Lay the details out in two side-by-side columns. */
-  columns?: boolean;
   children: ReactNode;
 }) {
   return (
     <section className={`${styles.card} ${wide ? styles.cardWide : ""}`}>
-      <h3 className={styles.cardTitle}>{title}</h3>
-      <dl className={`${styles.dl} ${columns ? styles.dlColumns : ""}`}>
-        {children}
-      </dl>
+      {title && <h3 className={styles.cardTitle}>{title}</h3>}
+      <dl className={styles.dl}>{children}</dl>
     </section>
   );
 }
@@ -172,7 +160,6 @@ function Detail({
   mono,
   wrap,
   stacked,
-  collapsible,
 }: {
   label: string;
   value?: string;
@@ -180,36 +167,14 @@ function Detail({
   wrap?: boolean;
   /** Place the label above the value instead of beside it. */
   stacked?: boolean;
-  /** Clamp tall values to a few lines with an expand toggle. */
-  collapsible?: boolean;
 }) {
   if (!value) return null;
   return (
     <div className={`${styles.detail} ${stacked ? styles.detailStacked : ""}`}>
       <dt className={styles.dt}>{label}</dt>
       <dd className={`${styles.dd} ${mono ? styles.mono : ""} ${wrap ? styles.wrap : ""}`}>
-        {collapsible ? <CollapsibleValue value={value} /> : value}
+        {value}
       </dd>
-    </div>
-  );
-}
-
-/** A long value clamped to a few lines, expandable on click. */
-function CollapsibleValue({ value }: { value: string }) {
-  const [expanded, setExpanded] = useState(false);
-  // Only worth collapsing if it spans several lines or is very long.
-  const isLong = value.split("\n").length > 2 || value.length > 160;
-  if (!isLong) return <>{value}</>;
-  return (
-    <div className={styles.collapsible}>
-      <div className={expanded ? styles.expanded : styles.clamped}>{value}</div>
-      <button
-        type="button"
-        className={styles.toggle}
-        onClick={() => setExpanded((v) => !v)}
-      >
-        {expanded ? "Show less" : "Show more"}
-      </button>
     </div>
   );
 }

@@ -105,20 +105,6 @@
   margin: 0;
 }
 
-/* Two side-by-side columns (Diagnostics: region info | summary). */
-.dlColumns {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-  align-items: start;
-}
-
-@media (max-width: 720px) {
-  .dlColumns {
-    grid-template-columns: 1fr;
-  }
-}
-
 .detail {
   display: flex;
   gap: 10px;
@@ -163,42 +149,8 @@
 }
 
 .wrap {
-  /* Preserve embedded newlines (e.g. VM summary) while still wrapping long lines. */
+  /* Preserve embedded newlines (e.g. VM region info) while still wrapping. */
   white-space: pre-wrap;
-}
-
-.collapsible {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-
-.clamped {
-  width: 100%;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.expanded {
-  width: 100%;
-  white-space: inherit;
-}
-
-.toggle {
-  border: none;
-  background: none;
-  padding: 0;
-  color: var(--accent);
-  font-family: var(--sans);
-  font-size: 12px;
-}
-
-.toggle:hover {
-  text-decoration: underline;
 }
 
 /* Quick peek at the crashed thread */

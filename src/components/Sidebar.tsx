@@ -1,4 +1,4 @@
-import type { CrashReport, Thread } from "../types";
+import type { CrashReport, StackFrame, Thread } from "../types";
 import styles from "./Sidebar.module.css";
 
 export type View =
@@ -25,12 +25,18 @@ export function Sidebar({
 }: SidebarProps) {
   const isActive = (v: View) => sameView(v, view);
 
+  // Filter the thread list to threads containing a frame that matches the
+  // query (case-insensitive substring). Frames themselves are never filtered.
+  const visibleThreads = report.threads.filter((thread) =>
+    threadMatchesQuery(thread, query),
+  );
+
   return (
     <nav className={styles.sidebar}>
       <div className={styles.search}>
         <input
           type="search"
-          placeholder="Filter frames & symbols…"
+          placeholder="Filter threads by frame…"
           value={query}
           onChange={(e) => onQueryChange(e.target.value)}
           className={styles.searchInput}
@@ -57,21 +63,30 @@ export function Sidebar({
       </ul>
 
       <div className={styles.sectionLabel}>
-        Threads <span className={styles.sectionCount}>{report.threads.length}</span>
+        Threads{" "}
+        <span className={styles.sectionCount}>
+          {query.trim()
+            ? `${visibleThreads.length}/${report.threads.length}`
+            : report.threads.length}
+        </span>
       </div>
       <ul className={styles.threadList}>
-        {report.threads.map((thread) => (
-          <ThreadItem
-            key={thread.index}
-            thread={thread}
-            active={
-              view.kind === "thread" && view.threadIndex === thread.index
-            }
-            onClick={() =>
-              onSelect({ kind: "thread", threadIndex: thread.index })
-            }
-          />
-        ))}
+        {visibleThreads.length === 0 ? (
+          <li className={styles.threadEmpty}>No threads match “{query}”.</li>
+        ) : (
+          visibleThreads.map((thread) => (
+            <ThreadItem
+              key={thread.index}
+              thread={thread}
+              active={
+                view.kind === "thread" && view.threadIndex === thread.index
+              }
+              onClick={() =>
+                onSelect({ kind: "thread", threadIndex: thread.index })
+              }
+            />
+          ))
+        )}
       </ul>
     </nav>
   );
@@ -138,4 +153,20 @@ function threadLabel(thread: Thread): string {
   if (thread.name) return thread.name;
   if (thread.queue) return thread.queue;
   return `Thread ${thread.index}`;
+}
+
+/** A thread matches when any of its frames contains the query as a substring. */
+function threadMatchesQuery(thread: Thread, query: string): boolean {
+  const q = query.trim().toLowerCase();
+  if (!q) return true;
+  return thread.frames.some((frame) => frameMatchesQuery(frame, q));
+}
+
+function frameMatchesQuery(frame: StackFrame, q: string): boolean {
+  return Boolean(
+    frame.symbol?.toLowerCase().includes(q) ||
+      frame.image.toLowerCase().includes(q) ||
+      frame.address.toLowerCase().includes(q) ||
+      frame.sourceFile?.toLowerCase().includes(q),
+  );
 }

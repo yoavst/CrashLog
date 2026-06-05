@@ -35,7 +35,6 @@ export function BinaryImagesPanel({ images, query }: BinaryImagesPanelProps) {
               <th>Name</th>
               <th>Load Address</th>
               <th>Size</th>
-              <th>Arch</th>
               <th>UUID</th>
               <th>Path</th>
             </tr>
@@ -46,13 +45,8 @@ export function BinaryImagesPanel({ images, query }: BinaryImagesPanelProps) {
                 <td className={styles.name}>{img.name}</td>
                 <td className={styles.addr}>{img.base}</td>
                 <td className={styles.size}>{formatBytes(img.size)}</td>
-                <td className={styles.arch}>{img.arch ?? "—"}</td>
-                <td className={styles.uuid} title={img.uuid}>
-                  {img.uuid ?? "—"}
-                </td>
-                <td className={styles.path} title={img.path}>
-                  {img.path ?? "—"}
-                </td>
+                <td className={styles.uuid}>{img.uuid ?? "—"}</td>
+                <td className={styles.path}>{img.path ?? "—"}</td>
               </tr>
             ))}
           </tbody>
