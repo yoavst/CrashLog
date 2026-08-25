@@ -297,6 +297,9 @@ export function parseIps(text: string, fileName?: string): CrashReport {
         threads,
         faultingThreadIndex: faultingThreadIndex >= 0 ? faultingThreadIndex : undefined,
         images,
+        dyld: dyld
+            ? { base: toHexAddress(dyld.cacheBase), slide: toHexAddress(dyld.slide) }
+            : undefined,
         extra: buildExtra(payload),
         raw: text,
     }

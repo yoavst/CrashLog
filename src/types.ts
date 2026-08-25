@@ -27,6 +27,9 @@ export interface CrashReport {
     /** Loaded binary images, indexed as referenced by frames. */
     images: BinaryImage[]
 
+    /** Dyld shared cache base and slide, when the report provides them. */
+    dyld?: DyldInfo
+
     /** Additional diagnostic key/value pairs that don't fit elsewhere. */
     extra: KeyValue[]
 
@@ -122,6 +125,14 @@ export interface BinaryImage {
     /** Image size in bytes. */
     size?: number
     path?: string
+}
+
+/** Dyld shared cache geometry, used to unslide dyld-cache addresses. */
+export interface DyldInfo {
+    /** Slid base address of the dyld shared cache. */
+    base: string
+    /** Dyld slide: difference between the slid base and the preferred base. */
+    slide: string
 }
 
 export interface KeyValue {

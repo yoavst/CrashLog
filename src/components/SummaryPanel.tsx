@@ -58,6 +58,13 @@ export function SummaryPanel({ report, onSelectThread }: SummaryPanelProps) {
                         }
                     />
                     <Detail label="Path" value={process.path} mono wrap />
+                    {report.dyld && (
+                        <Detail
+                            label="Dyld base"
+                            value={`${report.dyld.base} (${report.dyld.slide})`}
+                            mono
+                        />
+                    )}
                 </Card>
 
                 <Card title="Device">
