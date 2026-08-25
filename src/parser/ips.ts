@@ -96,7 +96,21 @@ interface IpsPayload {
     threads?: IpsThread[]
     usedImages?: IpsImage[]
     faultingThread?: number
+    sharedCache?: { base?: number; size?: number }
     vmRegionInfo?: string
+}
+
+/** Preferred (unslid) base address of the dyld shared cache on arm64. */
+const DYLD_SHARED_CACHE_PREFERRED_BASE = 0x180000000
+
+/** Shared-cache geometry used to unslide addresses in dyld-cache images. */
+interface DyldContext {
+    /** Difference between the slid cache base and the preferred base. */
+    slide: number
+    /** Slid base of the shared cache. */
+    cacheBase: number
+    /** Size of the shared cache in bytes. */
+    cacheSize: number
 }
 
 /** Split the raw file into its header and payload JSON objects. */
@@ -146,17 +160,24 @@ function normalizeUuid(uuid: string | undefined): string | undefined {
     return uuid.toUpperCase()
 }
 
-function buildFrames(frames: IpsFrame[], images: BinaryImage[]): StackFrame[] {
+function buildFrames(frames: IpsFrame[], images: BinaryImage[], dyld?: DyldContext): StackFrame[] {
     return frames.map((frame, depth) => {
         const imageIndex = frame.imageIndex ?? -1
         const image = images[imageIndex]
         const baseValue = image?.baseValue ?? 0
         const offset = frame.imageOffset ?? 0
+        const address = baseValue + offset
         return {
             depth,
             image: image?.name ?? '???',
             imageIndex,
-            address: toHexAddress(baseValue + offset),
+            address: toHexAddress(address),
+            unslidAddress:
+                dyld !== undefined &&
+                address >= dyld.cacheBase &&
+                address < dyld.cacheBase + dyld.cacheSize
+                    ? toHexAddress(address - dyld.slide)
+                    : undefined,
             imageOffset: offset,
             symbol: frame.symbol,
             symbolOffset: frame.symbolLocation,
@@ -166,7 +187,7 @@ function buildFrames(frames: IpsFrame[], images: BinaryImage[]): StackFrame[] {
     })
 }
 
-function buildThreads(payload: IpsPayload, images: BinaryImage[]): Thread[] {
+function buildThreads(payload: IpsPayload, images: BinaryImage[], dyld?: DyldContext): Thread[] {
     const ipsThreads = payload.threads ?? []
     return ipsThreads.map((thread, index) => {
         const crashed = thread.triggered === true || payload.faultingThread === index
@@ -175,7 +196,7 @@ function buildThreads(payload: IpsPayload, images: BinaryImage[]): Thread[] {
             name: thread.name,
             queue: thread.queue,
             crashed,
-            frames: buildFrames(thread.frames ?? [], images),
+            frames: buildFrames(thread.frames ?? [], images, dyld),
             registers: buildRegisters(thread.threadState),
         }
     })
@@ -228,6 +249,18 @@ function buildExtra(payload: IpsPayload): KeyValue[] {
     return extra
 }
 
+/** Derive shared-cache geometry for unsliding dyld-cache addresses, if present. */
+function buildDyldContext(payload: IpsPayload): DyldContext | undefined {
+    const cache = payload.sharedCache
+    if (!cache || cache.base === undefined) return undefined
+    if (cache.base < DYLD_SHARED_CACHE_PREFERRED_BASE) return undefined
+    return {
+        slide: cache.base - DYLD_SHARED_CACHE_PREFERRED_BASE,
+        cacheBase: cache.base,
+        cacheSize: cache.size ?? 0,
+    }
+}
+
 export function parseIps(text: string, fileName?: string): CrashReport {
     const { header, payload } = splitDocuments(text)
     if (!payload) {
@@ -235,7 +268,8 @@ export function parseIps(text: string, fileName?: string): CrashReport {
     }
 
     const images = buildImages(payload.usedImages ?? [])
-    const threads = buildThreads(payload, images)
+    const dyld = buildDyldContext(payload)
+    const threads = buildThreads(payload, images, dyld)
     const faultingThreadIndex = threads.findIndex((t) => t.crashed)
 
     return {

@@ -28,6 +28,14 @@ export function BacktracePanel({ thread, images }: BacktracePanelProps) {
             </div>
 
             <ol className={styles.frames}>
+                <li className={styles.framesHeader} role="presentation">
+                    <span>#</span>
+                    <span>Image</span>
+                    <span>Offset</span>
+                    <span>Address</span>
+                    <span>Symbol</span>
+                    <span>UNSLIDED_ADDRESS</span>
+                </li>
                 {frames.map((frame) => (
                     <FrameRow
                         key={frame.depth}
@@ -76,6 +84,7 @@ function FrameRow({ frame, highlighted }: { frame: StackFrame; highlighted: bool
                     </span>
                 )}
             </span>
+            <span className={styles.unslidAddress}>{frame.unslidAddress ?? ''}</span>
         </li>
     )
 }

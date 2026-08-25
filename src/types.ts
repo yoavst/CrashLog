@@ -96,6 +96,8 @@ export interface StackFrame {
     imageIndex: number
     /** Absolute instruction address. */
     address: string
+    /** Unslid address (preferred base) for frames in the dyld shared cache. */
+    unslidAddress?: string
     /** Byte offset of the address from the image's load base. */
     imageOffset: number
     /** Symbol name, when symbolicated. */
